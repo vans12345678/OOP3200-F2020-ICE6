@@ -1,3 +1,9 @@
+/*
+ *Name: Andre Agrippa
+ *Date: 10/21/2020
+ *Class: OOP 3200 
+ *ICE 6  
+ */
 #include <iomanip>
 #include <iostream>
 #include <map>
@@ -100,29 +106,36 @@ int main()
 	outfile << gameObjects["Enemy"]->ToFile() << std::endl;
 	outfile.close();
 	
-	std::ifstream infile("GameObject.txt", std::ios::in);
+	std::cout << "\n END OF OUTPUT, STARTING INPUT" << std::endl;
+	std::ifstream infile;
+	std::string fileName = "GameObject.txt";
+	infile.open(fileName.c_str());
 
-	std::istream instream('');
-	GameObject* tempGameObject = new GameObject();
-
-	while(infile >> tempGameObject)
+	if(infile.is_open())
 	{
+
 		int id = 0;
 		float x,y = 0;
 		std::string name;
-		Vector2D<float> position;
 		
-		infile >> id >> name;
-		infile.ignore();
-		infile >> x;
-		infile.ignore();
-		infile >> y;
-		infile.ignore();
+		while(!infile.fail())
+		{			
+			infile >> id >> name;
+			infile.ignore(1,' ');
+			infile.ignore(1, '(');
+			infile >> x;
+			infile.ignore(1, ',');
+			infile >> y;
+			infile.ignore(1, ')');
 
-		auto* tempObject = new GameObject(name,id, x, y);
-		gameObjects[name + "2"] = tempObject;
+			auto* tempObject = new GameObject(name,id, x, y);
+			gameObjects[name + "2"] = tempObject;
+			
+		}
 		
+		infile.close();
 	}
+	
 	infile.close();
 	//For every game_object in gameObjects loop
 	for (const auto& game_object : gameObjects)
@@ -133,6 +146,6 @@ int main()
 		std::cout << game_object.second->ToString() << std::endl;
 	}
 
-	
+	std::cout << "\n END OF INPUT" << std::endl;
 }
 
